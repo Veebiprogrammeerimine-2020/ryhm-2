@@ -1,8 +1,30 @@
 <?php
+  //var_dump($_POST);
+  require("../../../../config_vp2020.php");
+  $database = "if20_rinde_2";
+  if(isset($_POST["ideasubmit"]) and !empty($_POST["ideainput"])){
+	  //loome andmebaasiga ühenduse
+	  $conn = new mysqli($serverhost, $serverusername, $serverpassword, $database);
+	  //valmistan ette SQL käsu andmete kirjutamiseks
+	  $stmt = $conn->prepare("INSERT INTO myideas (idea) VALUES(?)");
+	  echo $conn->error;
+	  //i - integer, d - decimal, s - string 
+	  $stmt->bind_param("s", $_POST["ideainput"]);
+	  $stmt->execute();
+	  $stmt->close();
+	  $conn->close();
+  }
+
   $username = "Andrus Rinde";
   $fulltimenow = date("d.m.Y H:i:s");
   $hournow = date("H");
   $partofday = "lihtsalt aeg";
+  
+  $weekdaynameset = ["esmaspäev", "teisipäev", "kolmapäev", "neljapäev", "reede", "laupäev", "pühapäev"];
+  $monthnameset = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
+  //echo $weekdaynameset[1];
+  $weekdaynow = date("N");
+  
   if($hournow < 7){
 	  $partofday = "uneaeg";
   }
@@ -52,21 +74,41 @@
   if($fromsemesterstartdays > $semesterdurationdays){
 	  $semesterinfo = "Semester on läbi saanud!";
   }
+  
+  //loeme kataloogist piltide nimekirja
+  $allfiles = scandir("../vp_pics/");
+  //echo $allfiles;
+  //var_dump($allfiles);
+  $picfiles = array_slice($allfiles, 2);
+  //var_dump($picfiles);
+  $imghtml = "";
+  $piccount = count($picfiles);
+  //$i = $i + 1;
+  //$i ++;
+  //$i += 3
+  for($i = 0;$i < $piccount; $i ++){
+	  //<img src="../img/pildifail" alt="tekst">
+	  $imghtml .= '<img src="../vp_pics/' .$picfiles[$i] .'" alt="Tallinna Ülikool">';
+  }
+  require("header.php");
 ?>
-<!DOCTYPE html>
-<html lang="et">
-<head>
-  <meta charset="utf-8">
-  <title><?php echo $username; ?> programmeerib veebi</title>
 
-</head>
-<body>
+  <img src="../img/vp_banner.png" alt="Veebiprogrammeerimise kursuse logo">
   <h1><?php echo $username; ?></h1>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Leht on loodud veebiprogrammeerimise kursuse raames <a href="http://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>
-  <p>Lehe avamise hetkel oli: <?php echo $fulltimenow; ?>.</p>
+  <p>Lehe avamise hetkel oli: <?php echo $weekdaynameset[$weekdaynow - 1] .", " .$fulltimenow; ?>.</p>
   <p><?php echo "Parajasti on " .$partofday ."."; ?></p>
   <p><?php echo $semesterinfo; ?></p>
-
+  <hr>
+  <?php echo $imghtml; ?>
+  <hr>
+  <form method="POST">
+    <label>Kirjutage oma esimene pähe tulev mõte!</label>
+	<input type="text" name="ideainput" placeholder="mõttekoht">
+	<input type="submit" name="ideasubmit" value="Saade mõte teele!">
+  </form>
 </body>
 </html>
+
+
