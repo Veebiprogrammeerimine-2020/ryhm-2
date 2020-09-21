@@ -15,7 +15,7 @@
   }
   $stmt->close();
   $conn->close();
-
+  $username = "Andrus Rinde";
   require("header.php");
 ?>
 
@@ -23,7 +23,7 @@
   <h1><?php echo $username; ?></h1>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Leht on loodud veebiprogrammeerimise kursuse raames <a href="http://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>
-  
+  <p><a href="home.php">Avalehele</a></p>
   <?php echo $ideahtml; ?>
 </body>
 </html>

@@ -1,33 +1,6 @@
 <?php
   //var_dump($_POST);
-  require("../../../../config_vp2020.php");
-  $database = "if20_rinde_2";
-  if(isset($_POST["ideasubmit"]) and !empty($_POST["ideainput"])){
-	  //loome andmebaasiga ühenduse
-	  $conn = new mysqli($serverhost, $serverusername, $serverpassword, $database);
-	  //valmistan ette SQL käsu andmete kirjutamiseks
-	  $stmt = $conn->prepare("INSERT INTO myideas (idea) VALUES(?)");
-	  echo $conn->error;
-	  //i - integer, d - decimal, s - string 
-	  $stmt->bind_param("s", $_POST["ideainput"]);
-	  $stmt->execute();
-	  $stmt->close();
-	  $conn->close();
-  }
   
-  //loen andmebaasist senised mõtted
-  $ideahtml = "";
-  $conn = new mysqli($serverhost, $serverusername, $serverpassword, $database);
-  $stmt = $conn->prepare("SELECT idea FROM myideas");
-  //seon tulemuse muutujaga
-  $stmt->bind_result($ideafromdb);
-  $stmt->execute();
-  while($stmt->fetch()){
-	  $ideahtml .= "<p>" .$ideafromdb ."</p>";
-  }
-  $stmt->close();
-  $conn->close();
-
   $username = "Andrus Rinde";
   $fulltimenow = date("d.m.Y H:i:s");
   $hournow = date("H");
@@ -99,10 +72,13 @@
   //$i = $i + 1;
   //$i ++;
   //$i += 3
-  for($i = 0;$i < $piccount; $i ++){
+  /* for($i = 0;$i < $piccount; $i ++){
 	  //<img src="../img/pildifail" alt="tekst">
 	  $imghtml .= '<img src="../vp_pics/' .$picfiles[$i] .'" alt="Tallinna Ülikool">';
-  }
+  } */
+  //$randompicnum = mt_rand(0,($piccount - 1));
+  //$imghtml = '<img src="../vp_pics/' .$picfiles[$randompicnum] .'" alt="Tallinna Ülikool">';
+  $imghtml = '<img src="../vp_pics/' .$picfiles[mt_rand(0,($piccount - 1))] .'" alt="Tallinna Ülikool">';
   require("header.php");
 ?>
 
@@ -119,13 +95,7 @@
   <hr>
   <?php echo $imghtml; ?>
   <hr>
-  <form method="POST">
-    <label>Kirjutage oma esimene pähe tulev mõte!</label>
-	<input type="text" name="ideainput" placeholder="mõttekoht">
-	<input type="submit" name="ideasubmit" value="Saade mõte teele!">
-  </form>
-  <hr>
-  <?php echo $ideahtml; ?>
+
 </body>
 </html>
 
