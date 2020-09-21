@@ -86,9 +86,11 @@
   <h1><?php echo $username; ?></h1>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Leht on loodud veebiprogrammeerimise kursuse raames <a href="http://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>
-  <p>
-  <a href="addideas.php">Oma mõtete salvestamine</a> | <a href="listideas.php">Mõtete vaatamine</a>
-  </p>
+  <ul>
+    <li><a href="addideas.php">Oma mõtete salvestamine</a></li>
+	<li><a href="listideas.php">Mõtete vaatamine</a></li>
+	<li><a href="listfilms.php">Filmide nimekirja vaatamine</a></li>
+  </ul>
   <p>Lehe avamise hetkel oli: <?php echo $weekdaynameset[$weekdaynow - 1] .", " .$fulltimenow; ?>.</p>
   <p><?php echo "Parajasti on " .$partofday ."."; ?></p>
   <p><?php echo $semesterinfo; ?></p>
