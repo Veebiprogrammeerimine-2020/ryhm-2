@@ -90,6 +90,7 @@
     <li><a href="addideas.php">Oma mõtete salvestamine</a></li>
 	<li><a href="listideas.php">Mõtete vaatamine</a></li>
 	<li><a href="listfilms.php">Filmide nimekirja vaatamine</a></li>
+	<li><a href="addfilms.php">Filmiinfo lisamine</a></li>
   </ul>
   <p>Lehe avamise hetkel oli: <?php echo $weekdaynameset[$weekdaynow - 1] .", " .$fulltimenow; ?>.</p>
   <p><?php echo "Parajasti on " .$partofday ."."; ?></p>
