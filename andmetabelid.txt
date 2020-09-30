@@ -2,4 +2,4 @@ mõtted
 CREATE TABLE `if20_rinde_2`.`myideas` ( `myideas_id` INT(4) NOT NULL AUTO_INCREMENT , `idea` VARCHAR(256) NOT NULL , `deleted` DATETIME NULL , PRIMARY KEY (`myideas_id`)) ENGINE = InnoDB;
 
 Kasutajad
-CREATE TABLE `if20_rinde_2`.`vpusers` ( `vpuser_id` INT(11) NOT NULL AUTO_INCREMENT , `firstname` VARCHAR(30) NOT NULL , `lastname` VARCHAR(30) NOT NULL , `birthdate` DATE NOT NULL , `gender` INT(1) NOT NULL , `email` VARCHAR(100) NOT NULL , `password` VARCHAR(60) NOT NULL , `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`vpusers_id`)) ENGINE = InnoDB;
+CREATE TABLE `if20_rinde_2`.`vpusers` ( `vpusers_id` INT(11) NOT NULL AUTO_INCREMENT , `firstname` VARCHAR(30) NOT NULL , `lastname` VARCHAR(30) NOT NULL , `birthdate` DATE NOT NULL , `gender` INT(1) NOT NULL , `email` VARCHAR(100) NOT NULL , `password` VARCHAR(60) NOT NULL , `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`vpusers_id`)) ENGINE = InnoDB;
