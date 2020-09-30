@@ -1,7 +1,7 @@
 <?php
   require("../../../../config_vp2020.php");
   require("fnc_common.php");
-  //require("fnc_user.php");
+  require("fnc_user.php");
   //kui klikiti nuppu, siis kontrollime ja salvestame
   $monthnameset = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
   $firstname= "";
@@ -47,6 +47,33 @@
 		  $gendererror = "Palun märgi sugu!";
 	  }
 	  
+	  if(isset($_POST["birthdayinput"])){
+		  $birthday = intval($_POST["birthdayinput"]);
+	  } else {
+		  $birthdayerror = "Palun vali sünnikuupäev!";
+	  }
+	  
+	  if(isset($_POST["birthmonthinput"])){
+		  $birthmonth = intval($_POST["birthmonthinput"]);
+	  } else {
+		  $birthmontherror = "Palun vali sünnikuu!";
+	  }
+	  
+	  if(isset($_POST["birthyearinput"])){
+		  $birthyear = intval($_POST["birthyearinput"]);
+	  } else {
+		  $birthyearerror = "Palun vali sünniaasta!";
+	  }
+	  
+	  if(empty($birthdayerror) and empty($birthmontherror) and empty($birthyearerror)){
+		  if(checkdate($birthmonth, $birthday, $birthyear)){
+			  $tempdate = new DateTime($birthyear ."-" .$birthmonth ."-" .$birthday);
+			  $birthdate = $tempdate->format("Y-m-d");
+		  } else {
+			  $birthdateerror = "Valitud kuupäev on ebareaalne!"; 
+		  }
+	  }
+	  
 	  if (!empty($_POST["emailinput"])){
 		$email = test_input($_POST["emailinput"]);
 	  } else {
@@ -69,14 +96,22 @@
 		  }
 	  }
 	  
-	  if(empty($firstnameerror) and empty($lastnameerror) and empty($gendererror ) and empty($emailerror) and empty($passworderror) and empty($confirmpassworderror)){
-		//$notice = signup($firstname, $lastname, $email, $gender, $birthdate, $_POST["passwordinput"]);
-		$notice = "Kõik korras!";
-		
-		$firstname= "";
-	    $lastname = "";
-		$gender = "";
-		$email = "";
+	  if(empty($firstnameerror) and empty($lastnameerror) and empty($gendererror ) and empty($birthdayerror) and empty($birthmontherror) and empty($birthyearerror) and empty($birthdateerror) and empty($emailerror) and empty($passworderror) and empty($confirmpassworderror)){
+		$result = signup($firstname, $lastname, $email, $gender, $birthdate, $_POST["passwordinput"]);
+		//$notice = "Kõik korras!";
+		if($result == "ok"){
+			$notice = "Kasutaja on edukalt loodud!";
+			$firstname= "";
+			$lastname = "";
+			$gender = "";
+			$birthday = null;
+			$birthmonth = null;
+			$birthyear = null;
+			$birthdate = null;
+			$email = "";
+		} else {
+			$notice = "Kahjuks tekkis tehniline viga: " .$result;
+		}
 	  }
 	  
   }
