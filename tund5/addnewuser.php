@@ -1,16 +1,25 @@
 <?php
   require("../../../../config_vp2020.php");
+  require("fnc_common.php");
   //require("fnc_user.php");
   //kui klikiti nuppu, siis kontrollime ja salvestame
   $monthnameset = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
   $firstname= "";
   $lastname = "";
   $gender = "";
+  $birthday = null;
+  $birthmonth = null;
+  $birthyear = null;
+  $birthdate = null;
   $email = "";
     
   $firstnameerror = "";
   $lastnameerror = "";
   $gendererror = "";
+  $birthdayerror = null;
+  $birthmontherror = null;
+  $birthyearerror = null;
+  $birthdateerror = null;
   $emailerror = "";
   $passworderror = "";
   $confirmpassworderror = "";
@@ -20,26 +29,26 @@
   if(isset($_POST["submituserdata"])){
 	  
 	  if (!empty($_POST["firstnameinput"])){
-		$firstname = $_POST["firstnameinput"];
+		$firstname = test_input($_POST["firstnameinput"]);
 	  } else {
 		  $firstnameerror = "Palun sisesta eesnimi!";
 	  }
 	  
 	  if (!empty($_POST["lastnameinput"])){
-		$lastname = $_POST["lastnameinput"];
+		$lastname = test_input($_POST["lastnameinput"]);
 	  } else {
 		  $lastnameerror = "Palun sisesta perekonnanimi!";
 	  }
 	  
 	  if(isset($_POST["genderinput"])){
-		//$gender = intval($_POST["genderinput"]);
-		$gender = $_POST["genderinput"];
+		$gender = intval($_POST["genderinput"]);
+		//$gender = $_POST["genderinput"];
 	  } else {
 		  $gendererror = "Palun märgi sugu!";
 	  }
 	  
 	  if (!empty($_POST["emailinput"])){
-		$email = $_POST["emailinput"];
+		$email = test_input($_POST["emailinput"]);
 	  } else {
 		  $emailerror = "Palun sisesta e-postiaadress!";
 	  }
@@ -87,7 +96,7 @@
     <li><a href="home.php">Avalehele</a></li>
   </ul>
   <hr>
-  <form method="POST">
+  <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <label for="firstnameinput">Eesnimi:</label>
 	  <br>
 	  <input name="firstnameinput" id="firstnameinput" type="text" value="<?php echo $firstname; ?>"><span><?php echo $firstnameerror; ?></span>
@@ -100,6 +109,50 @@
 	  <input type="radio" name="genderinput" id="genderfemaleinput" value="2" <?php if($gender == "2"){		echo " checked";} ?>><label for="genderfemaleinput">Naine</label>
 	  <input type="radio" name="genderinput" id="gendermaleinput" value="1" <?php if($gender == "1"){		echo " checked";} ?>><label for="gendermaleinput">Mees</label>
 	  <span><?php echo "&nbsp; &nbsp; &nbsp;" .$gendererror; ?></span>
+	  <br>
+	  <br>
+	  
+	  <label for="birthdayinput">Sünnipäev: </label>
+		  <?php
+			echo '<select name="birthdayinput" id="birthdayinput">' ."\n";
+			echo '<option value="" selected disabled>päev</option>' ."\n";
+			for ($i = 1; $i < 32; $i ++){
+				echo '<option value="' .$i .'"';
+				if ($i == $birthday){
+					echo " selected";
+				}
+				echo ">" .$i ."</option> \n";
+			}
+			echo "</select> \n";
+		  ?>
+	  <label for="birthmonthinput">Sünnikuu: </label>
+	  <?php
+	    echo '<select name="birthmonthinput" id="birthmonthinput">' ."\n";
+		echo '<option value="" selected disabled>kuu</option>' ."\n";
+		for ($i = 1; $i < 13; $i ++){
+			echo '<option value="' .$i .'"';
+			if ($i == $birthmonth){
+				echo " selected";
+			}
+			echo ">" .$monthnameset[$i - 1] ."</option> \n";
+		}
+		echo "</select> \n";
+	  ?>
+	  <label for="birthyearinput">Sünniaasta: </label>
+	  <?php
+	    echo '<select name="birthyearinput" id="birthyearinput">' ."\n";
+		echo '<option value="" selected disabled>aasta</option>' ."\n";
+		for ($i = date("Y") - 10; $i >= date("Y") - 110; $i --){
+			echo '<option value="' .$i .'"';
+			if ($i == $birthyear){
+				echo " selected ";
+			}
+			echo ">" .$i ."</option> \n";
+		}
+		echo "</select> \n";
+	  ?>
+	  <br>
+	  <span><?php echo $birthdateerror ." " .$birthdayerror ." " .$birthmontherror ." " .$birthyearerror; ?></span>
 	  <br>
 	  <br>
 	  
