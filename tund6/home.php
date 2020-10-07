@@ -18,6 +18,7 @@
 	<li><a href="listideas.php">Mõtete vaatamine</a></li>
 	<li><a href="listfilms.php">Filmide nimekirja vaatamine</a></li>
 	<li><a href="addfilms.php">Filmiinfo lisamine</a></li>
+	<li><a href="userprofile.php">Minu kasutajaprofiil</a></li>
   </ul>
   
   <hr>

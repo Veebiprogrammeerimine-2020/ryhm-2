@@ -50,6 +50,10 @@
 					$_SESSION["userlastname"] = $lastnamefromdb;
 					$stmt->close();
 					
+					//kasutajaprofiil, tausta ja tekstivärv
+					$_SESSION["userbgcolor"] = "#CCCCCC";
+					$_SESSION["usertxtcolor"] = "#000066";
+					
 					$conn->close();
 					header("Location: home.php");
 					exit();
