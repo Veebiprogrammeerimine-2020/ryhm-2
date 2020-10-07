@@ -51,6 +51,7 @@
 					$stmt->close();
 					
 					//kasutajaprofiil, tausta ja tekstivärv
+					//lugeda andmebaasisit kasutajaprofiili, kui saab fetch käsuga värvid, siis need, muidu mus (#000000) ja valge (#FFFFFF)
 					$_SESSION["userbgcolor"] = "#CCCCCC";
 					$_SESSION["usertxtcolor"] = "#000066";
 					
@@ -73,8 +74,25 @@
 		return $result;
 	}
 	
+	function storeuserprofile($description, $bgcolor, $txtcolor){
+	//SQL
+	//kontrollime, kas äkki on profiil olemas
+	//SELECT vpuserprofiles_id FROM vpuserprofiles WHERE userid = ?
+	//küsimärk asendada väärtusega
+	//$_SESSION["userid"]
+	
+	//kui profiil on olemas, siis uuendame
+	//UPDATE vpuserprofiles SET description = ?, bgcolor = ?, txtcolor = ? WHERE userid = ?
+	
+	//Kui profiili pole olemas, siis loome
+	//INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)
+	
+	//execute jms võib loomisel/uuendamisel ühine olla
 	
 	
+	}
 	
-	
+	function readuserdescription(){
+		
+	}
 	

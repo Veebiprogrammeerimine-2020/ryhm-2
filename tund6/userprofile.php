@@ -6,9 +6,19 @@
   require("fnc_common.php");
   
   $notice = "";
-  
+  $userdescription = ""; //edaspidi püüate andmevbaasist lugeda, kui on, kasutate seda väärtust
+    
   if(isset($_POST["profilesubmit"])){
-	  
+	$description = test_input($_POST["descriptioninput"]);
+	$result = storeuserprofile($description, $_POST["bgcolorinput"], $_POST["txtcolorinput"]);
+	//sealt peaks tulema kas "ok" või mingi error!
+	if($result == "ok"){
+		$notice = "Kasutajaprofiil on salvestatud!";
+		$_SESSION["userbgcolor"] = $_POST["bgcolorinput"];
+		$_SESSION["usertxtcolor"] = $_POST["txtcolorinput"];
+	} else {
+		$notice = "Profiili salvestamine ebaõnnestus!";
+	}
   }
   
   //$username = "Andrus Rinde";
@@ -26,7 +36,7 @@
   <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <label for="descriptioninput">Minu lühitutvustus:</label>
 	<br>
-	<textarea name="descriptioninput" id="descriptioninput" rows="10" cols="80" placeholder="Minu tutvustus ..."></textarea>
+	<textarea name="descriptioninput" id="descriptioninput" rows="10" cols="80" placeholder="Minu tutvustus ..."><?php echo $userdescription; ?></textarea>
 	<br>
 	<label for="bgcolorinput">Minu valitud taustavärv: </label>
 	<input type="color" name="bgcolorinput" id="bgcolorinput" value="<?php echo $_SESSION["userbgcolor"]; ?>">
