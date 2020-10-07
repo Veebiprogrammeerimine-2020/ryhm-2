@@ -10,7 +10,6 @@
   //$username = "Andrus Rinde";
   require("header.php");
 ?>
-  <img src="../img/vp_banner.png" alt="Veebiprogrammeerimise kursuse logo">
   <h1><?php echo $_SESSION["userfirstname"] ." " .$_SESSION["userlastname"]; ?></h1>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Leht on loodud veebiprogrammeerimise kursuse raames <a href="http://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>

@@ -4,9 +4,15 @@
   require("../../../../config_vp2020.php");
   $database = "if20_rinde_2";
   require("fnc_common.php");
+  require("fnc_user.php");
   
   $notice = "";
-  $userdescription = ""; //edaspidi püüate andmevbaasist lugeda, kui on, kasutate seda väärtust
+  //$userdescription = ""; //edaspidi püüate andmevbaasist lugeda, kui on, kasutate seda väärtust
+  if(!empty($_POST["descriptioninput"])){
+	  $userdescription = test_input($_POST["descriptioninput"]);
+  } else {
+	  $userdescription = readuserdescription();
+  }
     
   if(isset($_POST["profilesubmit"])){
 	$description = test_input($_POST["descriptioninput"]);
@@ -25,7 +31,6 @@
   require("header.php");
 ?>
 
-  <img src="../img/vp_banner.png" alt="Veebiprogrammeerimise kursuse logo">
   <h1><?php echo $_SESSION["userfirstname"] ." " .$_SESSION["userlastname"]; ?></h1>
   <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
   <p>Leht on loodud veebiprogrammeerimise kursuse raames <a href="http://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>

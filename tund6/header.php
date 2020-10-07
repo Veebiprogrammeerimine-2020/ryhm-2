@@ -23,3 +23,4 @@
     
 </head>
 <body>
+<img src="../img/vp_banner.png" alt="Veebiprogrammeerimise kursuse logo">
