@@ -1,5 +1,6 @@
 <?php
   //var_dump($_POST);
+  session_start();
   require("../../../../config_vp2020.php");
   require("fnc_common.php");
   require("fnc_user.php");
@@ -89,7 +90,7 @@
   if(isset($_POST["submituserdata"])){
 	  if (!empty($_POST["emailinput"])){
 		//$email = test_input($_POST["emailinput"]);
-		$email = filter_var($_POST["emailinput"], FILTER_SANITIZE_EMAIL);
+		$email = filter_var($_POST["emailinput"], FILTER_SANITIZE_STRING);
 		if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$email = filter_var($email, FILTER_VALIDATE_EMAIL);
 		} else {

@@ -37,6 +37,19 @@
 				if(password_verify($password, $passwordfromdb)){
 					//parool õige, sisselogimine
 					$stmt->close();
+					//loen sisseloginud kasutaja nime ja id
+					$stmt = $conn->prepare("SELECT vpusers_id, firstname, lastname FROM vpusers WHERE email = ?");
+					echo $conn->error;
+					$stmt->bind_param("s", $email);
+					$stmt->bind_result($idfromdb, $firstnamefromdb, $lastnamefromdb);
+					$stmt->execute();
+					$stmt->fetch();
+					//salvestan saadud info sessioonimuutujatesse
+					$_SESSION["userid"] = $idfromdb;
+					$_SESSION["userfirstname"] = $firstnamefromdb;
+					$_SESSION["userlastname"] = $lastnamefromdb;
+					$stmt->close();
+					
 					$conn->close();
 					header("Location: home.php");
 					exit();
