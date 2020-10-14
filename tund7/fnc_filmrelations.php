@@ -134,10 +134,23 @@ function storenewstudiorelation($selectedfilm, $selectedstudio){
 	return $notice;
 }
 
-function readpersoninmovie(){
+function readpersoninmovie($sortby, $sortorder){
 	$notice = "<p>Kahjuks ei leidnud filmitegelasi!</p>";
 	$conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
-	$stmt=$conn->prepare("SELECT first_name, last_name, role, title FROM person JOIN person_in_movie ON person.person_id = person_in_movie.person_id JOIN movie ON movie.movie_id = person_in_movie.movie_id");
+	
+	$sqlphrase = "SELECT first_name, last_name, role, title FROM person JOIN person_in_movie ON person.person_id = person_in_movie.person_id JOIN movie ON movie.movie_id = person_in_movie.movie_id";
+	if($sortby == 0){
+		$stmt=$conn->prepare($sqlphrase);
+	}
+	if($sortby == 4){
+		if($sortorder == 2){
+			$stmt=$conn->prepare($sqlphrase ." ORDER BY title DESC");
+		} else {
+			$stmt=$conn->prepare($sqlphrase ." ORDER BY title");
+		}
+	}
+	
+	
 	echo $conn->error;
 	$stmt->bind_result($firstnamefromdb, $lastnamefromdb, $rolefromdb, $titlefromdb);
 	$stmt->execute();
