@@ -18,6 +18,7 @@
 	<li><a href="listfilms.php">Filmide nimekirja vaatamine</a></li>
 	<li><a href="addfilms.php">Filmiinfo lisamine</a></li>
 	<li><a href="addfilmrelations.php">Filmiinfo seoste lisamine</a></li>
+	<li><a href="listfilmpersons.php">Filmitegelaste loend</a></li>
 	<li><a href="userprofile.php">Minu kasutajaprofiil</a></li>
   </ul>
   
