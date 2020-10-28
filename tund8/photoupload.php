@@ -3,10 +3,48 @@
   require("../../../../config_vp2020.php");
     
   $inputerror = "";
+  $notice = "";
+  $fileuploadsizelimit = 1048576;
+  $fileuploaddir_orig = "../photoupload_orig/";
   //kas vajutati salvestusnuppu
   if(isset($_POST["photosubmit"])){
-	var_dump($_POST);
-	var_dump($_FILES);
+	//var_dump($_POST);
+	//var_dump($_FILES);
+	
+	//kas on üldse pilt
+	$check = getimagesize($_FILES["photoinput"]["tmp_name"]);
+	if($check !== false){
+		//var_dump($check);
+		if($check["mime"] == "image/jpeg"){
+			$filetype = "jpg";
+		}
+		if($check["mime"] == "image/png"){
+			$filetype = "png";
+		}
+		if($check["mime"] == "image/gif"){
+			$filetype = "gif";
+		}
+	} else {
+		$inputerror = "Valitud fail ei ole pilt!";
+	}
+	
+	//ega pole liiga suur fail
+	if($_FILES["photoinput"]["size"] > $fileuploadsizelimit){
+		$inputerror .= " Valitud fail on liiga suur!";
+	}
+	
+	//kas fail on olemas
+	if(file_exists($fileuploaddir_orig .$_FILES["photoinput"]["name"])){
+		$inputerror .= " Sellise nimega fail on juba olemas!";
+	}
+	
+	if(empty($inputerror)){
+		if(move_uploaded_file($_FILES["photoinput"]["tmp_name"], $fileuploaddir_orig .$_FILES["photoinput"]["name"])){
+			$notice .= " Originaalpildi üleslaadimine õnnestus!";
+		} else {
+			$notice .= "Originaalpildi üleslaadimisel tekkis viga!";
+		}
+	}
   }
   
   require("header.php");
@@ -38,7 +76,13 @@
 	<br>
 	<input type="submit" name="photosubmit" value="Lae pilt üles">
   </form>
-  <p><?php echo $inputerror; ?></p>
+  <p>
+  <?php
+	echo $inputerror;
+	echo $notice;
+  ?>
+	</p>
+  
   <hr>  
 </body>
 </html>
