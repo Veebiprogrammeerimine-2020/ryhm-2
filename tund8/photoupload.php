@@ -6,6 +6,11 @@
   $notice = "";
   $fileuploadsizelimit = 1048576;
   $fileuploaddir_orig = "../photoupload_orig/";
+  $fileuploaddir_normal = "../photoupload_normal/";
+  $filename = "";
+  $filenameprefix = "vp_";
+  $photomaxw = 600;
+  $photomaxh = 400;
   //kas vajutati salvestusnuppu
   if(isset($_POST["photosubmit"])){
 	//var_dump($_POST);
@@ -33,13 +38,74 @@
 		$inputerror .= " Valitud fail on liiga suur!";
 	}
 	
+	//genereerime failinime
+	$timestamp = microtime(1) * 10000;
+	$filename = $filenameprefix .$timestamp ."." .$filetype;
+	
 	//kas fail on olemas
-	if(file_exists($fileuploaddir_orig .$_FILES["photoinput"]["name"])){
+	if(file_exists($fileuploaddir_orig .$filename)){
 		$inputerror .= " Sellise nimega fail on juba olemas!";
 	}
 	
 	if(empty($inputerror)){
-		if(move_uploaded_file($_FILES["photoinput"]["tmp_name"], $fileuploaddir_orig .$_FILES["photoinput"]["name"])){
+		//teen väiksemaks
+		//loome image objekti ehk pikslikogumi
+		if($filetype == "jpg"){
+			$mytempimage = imagecreatefromjpeg($_FILES["photoinput"]["tmp_name"]);
+		}
+		if($filetype == "png"){
+			$mytempimage = imagecreatefrompng($_FILES["photoinput"]["tmp_name"]);
+		}
+		if($filetype == "gif"){
+			$mytempimage = imagecreatefromgif($_FILES["photoinput"]["tmp_name"]);
+		}
+		//pildi originaalsuurus
+		$imagew = imagesx($mytempimage);
+		$imageh = imagesy($mytempimage);
+		//kas lähtuda laiusest või kõrgusest ja leian vähendamise kordaja
+		if($imagew / $photomaxw > $imageh / $photomaxh){
+			$photosizeratio = $imagew / $photomaxw;
+		} else {
+			$photosizeratio = $imageh / $photomaxh;
+		}
+		//arvutan uued mõõdud
+		$neww = round($imagew / $photosizeratio);
+		$newh = round($imageh / $photosizeratio);
+		//loon uue suurusega pildiobjekti
+		$mynewtempimage = imagecreatetruecolor($neww, $newh);
+		//säilitamaks png piltide läbipaistvat osa 
+		imagesavealpha($mynewtempimnage, true);
+		$transparentcolor = imagecolorallocatealpha($mynewtempimage, 0,0,0,127);
+		imagefill($mynewtempimage, 0,0, $transparentcolor);
+		
+		imagecopyresampled($mynewtempimage, $mytempimage, 0, 0, 0, 0, $neww, $newh, $imagew, $imageh);
+		
+		//vähendatud pilt faili
+		if($filetype == "jpg"){
+			if(imagejpeg($mynewtempimage, $fileuploaddir_normal .$filename, 90)){
+				$notice = "Vähendatud pildi salvestamine õnnestus!";
+			} else {
+				$notice = "Vähendatud pildi salvestamine ebaõnnestus!";
+			}
+		}
+		if($filetype == "png"){
+			if(imagepng($mynewtempimage, $fileuploaddir_normal .$filename, 6)){
+				$notice = "Vähendatud pildi salvestamine õnnestus!";
+			} else {
+				$notice = "Vähendatud pildi salvestamine ebaõnnestus!";
+			}
+		}
+		if($filetype == "gif"){
+			if(imagegif($mynewtempimage, $fileuploaddir_normal .$filename)){
+				$notice = "Vähendatud pildi salvestamine õnnestus!";
+			} else {
+				$notice = "Vähendatud pildi salvestamine ebaõnnestus!";
+			}
+		}
+		imagedestroy($mynewtempimage);
+		imagedestroy($mytempimage);
+		
+		if(move_uploaded_file($_FILES["photoinput"]["tmp_name"], $fileuploaddir_orig .$filename)){
 			$notice .= " Originaalpildi üleslaadimine õnnestus!";
 		} else {
 			$notice .= "Originaalpildi üleslaadimisel tekkis viga!";
