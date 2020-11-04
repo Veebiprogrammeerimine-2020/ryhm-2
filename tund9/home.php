@@ -1,9 +1,15 @@
 <?php
   //var_dump($_POST);
   require("usesession.php");
+  require("classes/Generic_class.php");
 
-  
-  //$username = "Andrus Rinde";
+  //testime klassi kasutamiset
+  //$myfirstclass = new Generic(8);
+  //echo " Saladus on: " .$myfirstclass->mysecret;
+  //echo " Oluliselt avalikum saladus on: " .$myfirstclass->yoursecret;
+  //$myfirstclass->showValue();
+  //unset($myfirstclass);
+  //echo " Oluliselt avalikum saladus on: " .$myfirstclass->yoursecret;
   
   require("header.php");
 ?>

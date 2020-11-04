@@ -3,6 +3,7 @@
   require("../../../../config_vp2020.php");
   require("fnc_photo.php");
   require("fnc_common.php");
+  require("classes/Photoupload_class.php");
     
   $inputerror = "";
   $notice = "";
@@ -17,6 +18,7 @@
   $thumbsize = 100;
   $privacy = 1;
   $alttext = null;
+  $watermark = "../img/vp_logo_w100_overlay.png";
   
   //kas vajutati salvestusnuppu
   if(isset($_POST["photosubmit"])){
@@ -57,43 +59,40 @@
 	}
 	
 	if(empty($inputerror)){
+		//võtame kasutusele Photoupload klassi
+		$myphoto = new Photoupload($_FILES["photoinput"], $filetype);
+		
 		//teen väiksemaks
 		//loome image objekti ehk pikslikogumi
-		if($filetype == "jpg"){
-			$mytempimage = imagecreatefromjpeg($_FILES["photoinput"]["tmp_name"]);
-		}
-		if($filetype == "png"){
-			$mytempimage = imagecreatefrompng($_FILES["photoinput"]["tmp_name"]);
-		}
-		if($filetype == "gif"){
-			$mytempimage = imagecreatefromgif($_FILES["photoinput"]["tmp_name"]);
-		}
+
 		//muudame suurust
-		$mynewimage = resizePhoto($mytempimage, $photomaxw, $photomaxh, true);
+		//$mynewimage = resizePhoto($mytempimage, $photomaxw, $photomaxh, true);
+		$myphoto->resizePhoto($photomaxw, $photomaxh, true);
+		$myphoto->addWatermark($watermark);
 		//salvestame vähendatud pildi faili
-		$result = savePhotoFile($mynewimage, $filetype, $fileuploaddir_normal .$filename);
+		//$result = savePhotoFile($mynewimage, $filetype, $fileuploaddir_normal .$filename);
+		$result = $myphoto->savePhotoFile($fileuploaddir_normal .$filename);
 		if($result == 1){
 			$notice .= "Vähendatud pildi salvestamine õnnestus!";
 		} else {
 			$inputerror .= "Vähendatud pildi salvestamisel tekkis tõrge!";
 		}
-		imagedestroy($mynewimage);
-		
+				
 		//pisipilt
-		$mynewimage = resizePhoto($mytempimage, $thumbsize, $thumbsize);
-		$result = savePhotoFile($mynewimage, $filetype, $fileuploaddir_thumb .$filename);
+		//$mynewimage = resizePhoto($mytempimage, $thumbsize, $thumbsize);
+		$myphoto->resizePhoto($thumbsize, $thumbsize);
+		//$result = savePhotoFile($mynewimage, $filetype, $fileuploaddir_thumb .$filename);
+		$result = $myphoto->savePhotoFile($fileuploaddir_thumb .$filename);
 		if($result == 1){
-			$notice .= "Pisipildi salvestamine õnnestus!";
+			$notice .= " Pisipildi salvestamine õnnestus!";
 		} else {
 			$inputerror .= "Pisipildi salvestamisel tekkis tõrge!";
 		}
-		imagedestroy($mynewimage);
-		
-		imagedestroy($mytempimage);
 		
 		//kui vigu pole, salvestame originaalpildi
 		if(empty($inputerror)){
-			if(move_uploaded_file($_FILES["photoinput"]["tmp_name"], $fileuploaddir_orig .$filename)){
+			$result = $myphoto->saveOriginalPhoto($fileuploaddir_orig .$filename);
+			if($result == 1){
 				$notice .= " Originaalpildi salvestamine õnnestus!";
 			} else {
 				$inputerror .= " Originaalpildi salvestamisel tekkis viga!";
@@ -113,6 +112,8 @@
 		} else {
 			$inputerror .= " Tekkinud vigade tõttu pildi andmeid ei salvestatud!";
 		}
+		
+		unset($myphoto);
 	}
   }
   
