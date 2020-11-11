@@ -1,6 +1,10 @@
 <?php
   //var_dump($_POST);
-  session_start();
+  //session_start();
+  require("classes/SessionManager.class.php");
+  //sessioonihaldus
+  SessionManager::sessionStart("vp", 0, "/~rinde/", "greeny.cs.tlu.ee");
+  
   require("../../../../config_vp2020.php");
   require("fnc_common.php");
   require("fnc_user.php");

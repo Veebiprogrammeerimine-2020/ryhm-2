@@ -1,5 +1,9 @@
 <?php
-  session_start();
+  //session_start();
+  require("classes/SessionManager.class.php");
+  //sessioonihaldus
+  SessionManager::sessionStart("vp", 0, "/~rinde/", "greeny.cs.tlu.ee");
+  
     //logime välja
   if(isset($_GET["logout"])){
 	  session_destroy();
