@@ -66,12 +66,16 @@
 		$stmt->bind_result($filenamefromdb, $alttextfromdb);
 		$stmt->execute();
 		$temphtml = null;
+		//<div class="thumbgallery">
 		//<img src="failinimi.laiend" alt="tekst">
+		//</div>
 		while($stmt->fetch()){
-			$temphtml .= '<img src="' .$GLOBALS["fileuploaddir_thumb"] .$filenamefromdb .'" alt="' .$alttextfromdb .'">' ."\n";
+			$temphtml .= '<div class="thumbgallery">' ."\n";
+			$temphtml .= '<img src="' .$GLOBALS["fileuploaddir_thumb"] .$filenamefromdb .'" alt="' .$alttextfromdb .'" class="thumbs">' ."\n";
+			$temphtml .= "</div> \n"; 
 		}
 		if(!empty($temphtml)){
-			$thumbshtml = "<div> \n" .$temphtml ."</div> \n";
+			$thumbshtml = '<div class="galleryarea">' ."\n" .$temphtml ."</div> \n";
 		}
 		$stmt->close();
 		$conn->close();

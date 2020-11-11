@@ -22,6 +22,8 @@
   
   //$publicphotothumbshtml = readAllPublicPhotoThumbs(2);
   $publicphotothumbshtml = readAllPublicPhotoThumbsPage(2, $gallerypagelimit, $page);
+  
+  $tolink = '<link rel="stylesheet" type="text/css" href="style/gallery.css">' ."\n";
     
   require("header.php");
 ?>
